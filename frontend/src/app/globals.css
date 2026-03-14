@@ -1,0 +1,95 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-green: #22c55e;
+  --color-blue: #3b82f6;
+  --color-cyan: #06b6d4;
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #030712;
+  color: #f9fafb;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Scanline animation overlay */
+@keyframes scanLine {
+  0% { transform: translateY(-100%); opacity: 0.3; }
+  50% { opacity: 0.1; }
+  100% { transform: translateY(100vh); opacity: 0.3; }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0a0f1e;
+}
+::-webkit-scrollbar-thumb {
+  background: #22c55e;
+  border-radius: 3px;
+}
+
+/* Glow effect utilities */
+@layer utilities {
+  .glow-green {
+    box-shadow: 0 0 20px rgba(34, 197, 94, 0.3), 0 0 40px rgba(34, 197, 94, 0.1);
+  }
+  .glow-blue {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3), 0 0 40px rgba(59, 130, 246, 0.1);
+  }
+  .glow-text-green {
+    text-shadow: 0 0 20px rgba(34, 197, 94, 0.5);
+  }
+  .border-glow-green {
+    border-color: rgba(34, 197, 94, 0.5);
+    box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
+  }
+  .grid-bg {
+    background-image: linear-gradient(rgba(34, 197, 94, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(34, 197, 94, 0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+}
+
+/* Animated gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #22c55e, #3b82f6, #06b6d4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Terminal-style blinking cursor */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+.cursor-blink::after {
+  content: '|';
+  animation: blink 1s step-end infinite;
+  color: #22c55e;
+}
+
+/* Scan animation for demo section */
+@keyframes scanProgress {
+  0% { width: 0%; }
+  100% { width: 100%; }
+}
+.scan-progress {
+  animation: scanProgress 2.5s ease-in-out forwards;
+}

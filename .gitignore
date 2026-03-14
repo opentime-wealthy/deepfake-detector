@@ -50,6 +50,10 @@ htmlcov/
 node_modules/
 .next/
 
+# Frontend env (never commit secrets)
+frontend/.env.local
+frontend/.env.*.local
+
 # Docker
 *.log
 
