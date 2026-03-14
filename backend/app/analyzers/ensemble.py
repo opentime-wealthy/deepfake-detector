@@ -1,4 +1,4 @@
-# © 2026 TimeWealthy Limited — DeepGuard
+# © 2026 TimeWealthy Limited — FakeGuard
 """EnsembleScorer: combine analyzer results into final verdict."""
 
 from typing import Dict, Optional
@@ -21,6 +21,7 @@ VERDICT_MESSAGES = {
     "human_made": "この動画は人間制作と判断されます",
 }
 
+# War footage mode (includes war analyzer, redistributes weights)
 DEFAULT_WEIGHTS = {
     "frame": 0.30,
     "temporal": 0.30,
@@ -29,6 +30,7 @@ DEFAULT_WEIGHTS = {
     "war": 0.10,
 }
 
+# Standard mode (no war analyzer)
 STANDARD_WEIGHTS = {
     "frame": 0.35,
     "temporal": 0.35,
@@ -39,11 +41,16 @@ STANDARD_WEIGHTS = {
 
 class EnsembleScorer:
     """
-    Combines results from individual analyzers into a final AI-generation score and verdict.
+    Combines results from individual analyzers into a final AI-generation score.
 
-    Weights:
+    Weight configuration:
     - Standard mode: frame=0.35, temporal=0.35, audio=0.175, metadata=0.125
     - War footage mode: adds war=0.10, redistributes proportionally
+    
+    Boost logic:
+    - finding.confidence > 90  → +8 points
+    - finding.confidence > 80  → +4 points
+    - finding.confidence > 70  → +2 points
     """
 
     def score(
@@ -52,7 +59,7 @@ class EnsembleScorer:
         mode: str = "standard",
     ) -> Dict:
         """
-        Compute final verdict.
+        Compute final verdict from analyzer results.
 
         Args:
             results: Dict mapping analyzer name → AnalyzerResult
@@ -69,7 +76,7 @@ class EnsembleScorer:
                 "details": {},
             }
 
-        weights = self._get_weights(mode, results.keys())
+        weights = self._get_weights(mode, list(results.keys()))
         total_weight = 0.0
         weighted_sum = 0.0
         details = {}
@@ -77,6 +84,7 @@ class EnsembleScorer:
         for name, result in results.items():
             if result is None or result.has_error:
                 continue
+
             w = weights.get(name, 0.0)
             weighted_sum += result.score * w
             total_weight += w
@@ -84,7 +92,7 @@ class EnsembleScorer:
             # Serialize findings
             findings_list = []
             for f in result.findings:
-                fd = {
+                fd: Dict = {
                     "type": f.type,
                     "confidence": f.confidence,
                     "description": f.description,
@@ -95,6 +103,8 @@ class EnsembleScorer:
                     fd["timestamp"] = f.timestamp_sec
                 if f.frames is not None:
                     fd["frames"] = f.frames
+                if f.metadata is not None:
+                    fd["metadata"] = f.metadata
                 findings_list.append(fd)
 
             details[f"{name}_analysis"] = {
@@ -102,7 +112,7 @@ class EnsembleScorer:
                 "findings": findings_list,
             }
 
-        # Base score
+        # Weighted base score
         base_score = (weighted_sum / total_weight) if total_weight > 0 else 50.0
 
         # Boost for high-confidence findings
@@ -132,22 +142,28 @@ class EnsembleScorer:
             "details": details,
         }
 
-    def _get_weights(self, mode: str, available_analyzers) -> Dict[str, float]:
-        """Return normalized weights for available analyzers."""
+    def _get_weights(self, mode: str, available_analyzers: list) -> Dict[str, float]:
+        """Return weights normalized to available analyzers."""
         if mode == "war_footage":
             base = dict(DEFAULT_WEIGHTS)
         else:
             base = dict(STANDARD_WEIGHTS)
 
-        # Filter to available analyzers only
+        # Filter to analyzers that actually provided results
         filtered = {k: v for k, v in base.items() if k in available_analyzers}
+
+        if not filtered:
+            # Uniform distribution fallback
+            return {k: 1.0 / len(available_analyzers) for k in available_analyzers}
+
         total = sum(filtered.values())
         if total == 0:
             return {k: 1.0 / len(filtered) for k in filtered}
+
         return {k: v / total for k, v in filtered.items()}
 
     def _score_to_verdict(self, score: float) -> str:
-        """Map numerical score to verdict label."""
+        """Map numerical score [0-100] to verdict label."""
         for verdict, (low, high) in VERDICT_THRESHOLDS.items():
             if low <= score <= high:
                 return verdict
