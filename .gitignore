@@ -63,3 +63,5 @@ Thumbs.db
 
 # Alembic
 backend/alembic/versions/*.pyc
+benchmark/weights/*.pth
+benchmark/weights/c2patool

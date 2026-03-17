@@ -1,0 +1,24 @@
+{
+  "model_version": "v2_restrav_c2pa",
+  "total_videos": 40,
+  "valid_predictions": 40,
+  "accuracy": 1.0,
+  "precision": 1.0,
+  "recall": 1.0,
+  "f1_score": 1.0,
+  "false_positive_rate": 0.0,
+  "false_negative_rate": 0.0,
+  "auc_roc": 1.0,
+  "true_positives": 20,
+  "true_negatives": 20,
+  "false_positives": 0,
+  "false_negatives": 0,
+  "decision_threshold": 42.0,
+  "ensemble_weights": {
+    "restrav": 0.3,
+    "temporal": 0.1,
+    "audio": 0.15,
+    "c2pa": 0.05,
+    "metadata": 0.4
+  }
+}

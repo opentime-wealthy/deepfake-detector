@@ -23,19 +23,29 @@ VERDICT_MESSAGES = {
 
 # War footage mode (includes war analyzer, redistributes weights)
 DEFAULT_WEIGHTS = {
-    "frame": 0.30,
-    "temporal": 0.30,
-    "audio": 0.15,
-    "metadata": 0.15,
-    "war": 0.10,
+    "restrav": 0.40,   # ReStraV: DINOv2 perceptual straightening (primary)
+    "temporal": 0.20,  # Optical flow
+    "audio": 0.15,     # Audio MFCC/spectral
+    "c2pa": 0.15,      # Content Credentials metadata
+    "war": 0.10,       # War footage heuristics
 }
 
-# Standard mode (no war analyzer)
+# Standard mode (no war analyzer) — c2pa replaces metadata slot
 STANDARD_WEIGHTS = {
-    "frame": 0.35,
-    "temporal": 0.35,
-    "audio": 0.175,
-    "metadata": 0.125,
+    "restrav": 0.40,   # ReStraV: DINOv2 perceptual straightening (primary)
+    "temporal": 0.20,  # Optical flow
+    "audio": 0.15,     # Audio MFCC/spectral
+    "c2pa": 0.15,      # Content Credentials metadata
+    # metadata: folded into c2pa weight when not available
+}
+
+# Legacy weights (kept for backward compatibility — frame = old SigLIP slot)
+LEGACY_WEIGHTS = {
+    "frame": 0.40,
+    "temporal": 0.20,
+    "audio": 0.15,
+    "c2pa": 0.15,
+    "war": 0.10,
 }
 
 
@@ -43,9 +53,9 @@ class EnsembleScorer:
     """
     Combines results from individual analyzers into a final AI-generation score.
 
-    Weight configuration:
-    - Standard mode: frame=0.35, temporal=0.35, audio=0.175, metadata=0.125
-    - War footage mode: adds war=0.10, redistributes proportionally
+    Weight configuration (v2 — ReStraV model):
+    - Standard mode: restrav=0.40, temporal=0.20, audio=0.15, c2pa=0.15
+    - War footage mode: restrav=0.40, temporal=0.20, audio=0.15, c2pa=0.15, war=0.10
     
     Boost logic:
     - finding.confidence > 90  → +8 points

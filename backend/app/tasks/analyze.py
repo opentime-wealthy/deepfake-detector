@@ -61,7 +61,7 @@ def _execute_analysis(analysis_id: str, file_path: str, mode: str) -> dict:
     try:
         from app.models.analysis import Analysis
         from app.analyzers import (
-            FrameAnalyzer, TemporalAnalyzer, AudioAnalyzer,
+            ReStraVAnalyzer, C2PAAnalyzer, TemporalAnalyzer, AudioAnalyzer,
             MetadataAnalyzer, WarFootageAnalyzer, EnsembleScorer,
         )
         from app.utils.video import extract_frames, extract_audio, get_video_duration
@@ -81,12 +81,12 @@ def _execute_analysis(analysis_id: str, file_path: str, mode: str) -> dict:
 
         analyzer_results = {}
 
-        # Frame analysis
+        # ReStraV: DINOv2 perceptual trajectory analysis (replaces SigLIP FrameAnalyzer)
         try:
-            frame_result = FrameAnalyzer().analyze(frames, fps=fps)
-            analyzer_results["frame"] = frame_result
+            restrav_result = ReStraVAnalyzer().analyze(frames, fps=fps)
+            analyzer_results["restrav"] = restrav_result
         except Exception as e:
-            logger.warning(f"FrameAnalyzer failed: {e}")
+            logger.warning(f"ReStraVAnalyzer failed: {e}")
 
         # Temporal analysis
         try:
@@ -102,6 +102,13 @@ def _execute_analysis(analysis_id: str, file_path: str, mode: str) -> dict:
                 analyzer_results["audio"] = audio_result
             except Exception as e:
                 logger.warning(f"AudioAnalyzer failed: {e}")
+
+        # C2PA Content Credentials verification
+        try:
+            c2pa_result = C2PAAnalyzer().analyze(file_path)
+            analyzer_results["c2pa"] = c2pa_result
+        except Exception as e:
+            logger.warning(f"C2PAAnalyzer failed: {e}")
 
         # Metadata analysis
         try:
