@@ -1,51 +1,63 @@
 # © 2026 TimeWealthy Limited — FakeGuard
-"""EnsembleScorer: combine analyzer results into final verdict."""
+"""
+EnsembleScorer v3: combine analyzer results into final verdict.
+
+Weight configuration (v3 — ReStraV MLP model, length-bias free):
+  Standard mode:    restrav=0.50, temporal=0.15, audio=0.15, c2pa=0.10, metadata=0.10
+  War footage mode: restrav=0.50, temporal=0.15, audio=0.15, c2pa=0.10, war=0.10
+
+Key changes from v2:
+  - ReStraV weight raised to 0.50 (MLP is now primary signal)
+  - Metadata v2 duration/length signals REMOVED (were causing TikTok false positives)
+  - Metadata is kept only for AI tool keyword detection (low weight)
+  - War footage mode replaces metadata slot with war analyzer
+"""
 
 from typing import Dict, Optional
 from app.analyzers.base import AnalyzerResult
 
 
 VERDICT_THRESHOLDS = {
-    "ai_generated": (91, 100),
-    "likely_ai": (76, 90),
-    "uncertain": (51, 75),
-    "likely_human": (26, 50),
-    "human_made": (0, 25),
+    "ai_generated":  (91, 100),
+    "likely_ai":     (76, 90),
+    "uncertain":     (51, 75),
+    "likely_human":  (26, 50),
+    "human_made":    (0, 25),
 }
 
 VERDICT_MESSAGES = {
-    "ai_generated": "この動画はAI生成の可能性が極めて高いです",
-    "likely_ai": "この動画はAI生成の可能性が高いです",
-    "uncertain": "判定困難です。一部AI加工の疑いがあります",
-    "likely_human": "この動画は人間制作の可能性が高いです",
-    "human_made": "この動画は人間制作と判断されます",
+    "ai_generated":  "この動画はAI生成の可能性が極めて高いです",
+    "likely_ai":     "この動画はAI生成の可能性が高いです",
+    "uncertain":     "判定困難です。一部AI加工の疑いがあります",
+    "likely_human":  "この動画は人間制作の可能性が高いです",
+    "human_made":    "この動画は人間制作と判断されます",
 }
 
-# War footage mode (includes war analyzer, redistributes weights)
-DEFAULT_WEIGHTS = {
-    "restrav": 0.40,   # ReStraV: DINOv2 perceptual straightening (primary)
-    "temporal": 0.20,  # Optical flow
-    "audio": 0.15,     # Audio MFCC/spectral
-    "c2pa": 0.15,      # Content Credentials metadata
-    "war": 0.10,       # War footage heuristics
-}
-
-# Standard mode (no war analyzer) — c2pa replaces metadata slot
+# v3 Standard mode (no war analyzer, no metadata length bias)
 STANDARD_WEIGHTS = {
-    "restrav": 0.40,   # ReStraV: DINOv2 perceptual straightening (primary)
-    "temporal": 0.20,  # Optical flow
-    "audio": 0.15,     # Audio MFCC/spectral
-    "c2pa": 0.15,      # Content Credentials metadata
-    # metadata: folded into c2pa weight when not available
+    "restrav":   0.50,   # ReStraV MLP: DINOv2 trajectory (primary, length-free)
+    "temporal":  0.15,   # Optical flow variance
+    "audio":     0.15,   # Audio MFCC/spectral
+    "c2pa":      0.10,   # Content Credentials metadata
+    "metadata":  0.10,   # AI tool keyword detection ONLY (no duration bias)
 }
 
-# Legacy weights (kept for backward compatibility — frame = old SigLIP slot)
+# v3 War footage mode
+WAR_WEIGHTS = {
+    "restrav":   0.50,   # ReStraV MLP (primary)
+    "temporal":  0.15,   # Optical flow
+    "audio":     0.15,   # Audio
+    "c2pa":      0.10,   # C2PA
+    "war":       0.10,   # War footage heuristics
+}
+
+# Legacy fallback
 LEGACY_WEIGHTS = {
-    "frame": 0.40,
-    "temporal": 0.20,
-    "audio": 0.15,
-    "c2pa": 0.15,
-    "war": 0.10,
+    "frame":     0.40,
+    "temporal":  0.20,
+    "audio":     0.15,
+    "c2pa":      0.15,
+    "war":       0.10,
 }
 
 
@@ -53,14 +65,10 @@ class EnsembleScorer:
     """
     Combines results from individual analyzers into a final AI-generation score.
 
-    Weight configuration (v2 — ReStraV model):
-    - Standard mode: restrav=0.40, temporal=0.20, audio=0.15, c2pa=0.15
-    - War footage mode: restrav=0.40, temporal=0.20, audio=0.15, c2pa=0.15, war=0.10
-    
-    Boost logic:
-    - finding.confidence > 90  → +8 points
-    - finding.confidence > 80  → +4 points
-    - finding.confidence > 70  → +2 points
+    v3 changes:
+    - ReStraV MLP is primary (weight 0.50)
+    - Metadata duration/length signals removed (were biasing short real videos as AI)
+    - MetadataAnalyzer still included but only for keyword/tool-signature detection
     """
 
     def score(
@@ -153,17 +161,16 @@ class EnsembleScorer:
         }
 
     def _get_weights(self, mode: str, available_analyzers: list) -> Dict[str, float]:
-        """Return weights normalized to available analyzers."""
+        """Return normalized weights for available analyzers."""
         if mode == "war_footage":
-            base = dict(DEFAULT_WEIGHTS)
+            base = dict(WAR_WEIGHTS)
         else:
             base = dict(STANDARD_WEIGHTS)
 
-        # Filter to analyzers that actually provided results
+        # Filter to analyzers that provided results
         filtered = {k: v for k, v in base.items() if k in available_analyzers}
 
         if not filtered:
-            # Uniform distribution fallback
             return {k: 1.0 / len(available_analyzers) for k in available_analyzers}
 
         total = sum(filtered.values())
@@ -173,7 +180,6 @@ class EnsembleScorer:
         return {k: v / total for k, v in filtered.items()}
 
     def _score_to_verdict(self, score: float) -> str:
-        """Map numerical score [0-100] to verdict label."""
         for verdict, (low, high) in VERDICT_THRESHOLDS.items():
             if low <= score <= high:
                 return verdict

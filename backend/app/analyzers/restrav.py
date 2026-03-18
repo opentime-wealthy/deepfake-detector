@@ -2,266 +2,326 @@
 """
 ReStraVAnalyzer: AI-Generated Video Detection via Perceptual Straightening.
 
-Based on the paper "AI-Generated Video Detection via Perceptual Straightening"
-(NeurIPS 2025) by Christian Internò et al.
+Based on "AI-Generated Video Detection via Perceptual Straightening" (NeurIPS 2025).
 GitHub: https://github.com/ChristianInterno/ReStraV
 
-Core idea:
-  Natural (real) videos trace STRAIGHT trajectories in DINOv2 feature space.
-  AI-generated videos trace CURVED/irregular trajectories.
+Key changes in v3:
+  - Uses HuggingFace transformers for DINOv2 (torch.hub causes SIGSEGV on macOS)
+  - Primary: MLP classifier on 26-D trajectory features (length-bias free)
+  - Fallback: geometry-based heuristic (mean_theta thresholding)
+  - Frame extraction at 5fps for proper trajectory analysis (paper: 12fps)
+  - NO video duration in feature vector (removes short-video false positives)
 
-  We encode frames with DINOv2 ViT-S/14 and measure the geometric properties
-  (stepwise distances + turning angles) of the resulting trajectory.
-  High curvature → high AI score.
+Feature vector (26-D, length-independent):
+  [0:7]    7 stepwise L2 distances (early frames)
+  [7:13]   6 turning angles (curvature)
+  [13:17]  4 L2 distance stats (mean, min, max, var)
+  [17:21]  4 angle stats (mean, min, max, var)
+  [21:25]  4 cosine similarity stats (mean, min, max, var)
+  [25]     1 straightness index (end-to-end / total path)
 
-21-D feature vector per video (matches ReStraV paper):
-  d[0:7]        → 7 early stepwise L2 distances
-  theta[0:6]    → 6 early turning angles (radians)
-  mu_d, min_d, max_d, var_d       → 4 distance summary stats
-  mu_theta, min_theta, max_theta, var_theta → 4 angle summary stats
-  Total: 7 + 6 + 8 = 21
+MLP: 26 → 128 → 64 → 2  (loaded from backend/models/restrav_mlp.pth)
 """
 
 import logging
+import os
 import numpy as np
+from pathlib import Path
 from typing import List, Optional
 
 from app.analyzers.base import BaseAnalyzer, AnalyzerResult, Finding
 
 logger = logging.getLogger(__name__)
 
-# Singleton DINOv2 model (shared across instances)
-_DINOV2_MODEL = None
-_DINOV2_LOADED = False
+# Disable OMP/parallelism issues on macOS
+os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
+os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
+os.environ.setdefault("OMP_NUM_THREADS", "1")
 
-# Perceptual straightening normalization constants.
-# Calibrated empirically on our 40-video benchmark dataset:
-#   mean_theta_ai   ≈ 0.42 rad  (more curved)
-#   mean_theta_real ≈ 0.15 rad  (straighter)
-# We map [0.05, 0.60] → [0, 100] (clipped).
-_THETA_LOW = 0.05    # rad — very straight (certainly real)
-_THETA_HIGH = 0.60   # rad — very curved (certainly AI)
+# ─── Feature constants ────────────────────────────────────────────────────────
+FEAT_DIM = 26
+BATCH_SIZE = 8      # DINOv2 inference batch size
+
+# Heuristic fallback thresholds
+_THETA_LOW = 0.05   # rad — very straight (certainly real)
+_THETA_HIGH = 0.60  # rad — very curved (certainly AI)
+
+# ─── Singletons ───────────────────────────────────────────────────────────────
+_HF_MODEL = None
+_HF_PROC = None
+_HF_LOADED = False
+_MLP_MODEL = None
+_MLP_SCALER = None
+_MLP_LOADED = False
+
+
+def _get_models_dir() -> Path:
+    """Resolve backend/models directory relative to this file."""
+    # backend/app/analyzers → backend/models
+    return Path(__file__).parent.parent.parent / "models"
 
 
 def _load_dinov2():
-    """Lazy-load DINOv2 ViT-S/14 (singleton)."""
-    global _DINOV2_MODEL, _DINOV2_LOADED
-    if _DINOV2_LOADED:
-        return _DINOV2_MODEL
-    _DINOV2_LOADED = True
+    """Load DINOv2 ViT-S/14 via HuggingFace transformers (stable on macOS)."""
+    global _HF_MODEL, _HF_PROC, _HF_LOADED
+    if _HF_LOADED:
+        return _HF_MODEL, _HF_PROC
+    _HF_LOADED = True
+    try:
+        from transformers import AutoModel, AutoImageProcessor
+        _HF_PROC = AutoImageProcessor.from_pretrained(
+            "facebook/dinov2-small", use_fast=False
+        )
+        _HF_MODEL = AutoModel.from_pretrained("facebook/dinov2-small")
+        _HF_MODEL.eval()
+        logger.info("DINOv2 ViT-S/14 (HF) loaded OK (embed_dim=384)")
+    except Exception as e:
+        logger.warning(f"DINOv2 load failed: {e}")
+        _HF_MODEL = None
+        _HF_PROC = None
+    return _HF_MODEL, _HF_PROC
+
+
+def _load_mlp():
+    """Load trained MLP + scaler from backend/models/restrav_mlp.pth."""
+    global _MLP_MODEL, _MLP_SCALER, _MLP_LOADED
+    if _MLP_LOADED:
+        return _MLP_MODEL, _MLP_SCALER
+    _MLP_LOADED = True
+
+    mlp_path = _get_models_dir() / "restrav_mlp.pth"
+    if not mlp_path.exists():
+        logger.info(f"MLP not found at {mlp_path}. Using heuristic fallback.")
+        return None, None
+
     try:
         import torch
-        model = torch.hub.load(
-            "facebookresearch/dinov2", "dinov2_vits14",
-            pretrained=True, verbose=False
-        )
-        model.eval()
-        _DINOV2_MODEL = model
-        logger.info("DINOv2 ViT-S/14 loaded OK (embed_dim=384)")
-    except Exception as e:
-        logger.warning(f"Could not load DINOv2: {e}")
-        _DINOV2_MODEL = None
-    return _DINOV2_MODEL
+        import torch.nn as nn
 
+        ck = torch.load(str(mlp_path), map_location="cpu", weights_only=False)
+        input_dim = ck.get("input_dim", FEAT_DIM)
+
+        class _MLP(nn.Module):
+            def __init__(self, dim):
+                super().__init__()
+                self.net = nn.Sequential(
+                    nn.Linear(dim, 128), nn.BatchNorm1d(128), nn.ReLU(), nn.Dropout(0.3),
+                    nn.Linear(128, 64), nn.BatchNorm1d(64), nn.ReLU(), nn.Dropout(0.2),
+                    nn.Linear(64, 2),
+                )
+
+            def forward(self, x):
+                return self.net(x)
+
+        model = _MLP(input_dim)
+        model.load_state_dict(ck["model_state"])
+        model.eval()
+        _MLP_MODEL = model
+
+        mean = ck.get("scaler_mean")
+        scale = ck.get("scaler_scale")
+        if mean is not None and scale is not None:
+            _MLP_SCALER = (
+                np.array(mean, dtype=np.float32),
+                np.array(scale, dtype=np.float32),
+            )
+
+        val_acc = ck.get("val_accuracy", 0.0)
+        val_auc = ck.get("val_auc", 0.0)
+        logger.info(
+            f"ReStraV MLP loaded (dim={input_dim}, "
+            f"val_acc={val_acc:.1%}, val_auc={val_auc:.3f})"
+        )
+
+    except Exception as e:
+        logger.warning(f"MLP load failed: {e}. Heuristic fallback active.")
+        _MLP_MODEL = None
+        _MLP_SCALER = None
+
+    return _MLP_MODEL, _MLP_SCALER
+
+
+# ─── Embedding extraction ─────────────────────────────────────────────────────
 
 def _frames_to_dinov2_embeddings(
     frames: List[np.ndarray],
     model,
-    device: str = "cpu",
-    batch_size: int = 8,
+    processor,
+    batch_size: int = BATCH_SIZE,
 ) -> Optional[np.ndarray]:
-    """
-    Convert a list of BGR frames to DINOv2 [CLS] token embeddings.
-
-    Args:
-        frames: list of (H,W,3) BGR uint8 arrays
-        model: DINOv2 torch model
-        device: 'cpu', 'mps', or 'cuda'
-        batch_size: number of frames per forward pass
-
-    Returns:
-        (N, 384) float32 array of CLS embeddings, or None on failure
-    """
+    """(N, 384) float32 CLS embeddings via HuggingFace DINOv2."""
     try:
-        import torch
-        from torchvision import transforms
         from PIL import Image
+        import torch
 
-        preprocess = transforms.Compose([
-            transforms.Resize(224),
-            transforms.CenterCrop(224),
-            transforms.ToTensor(),
-            transforms.Normalize(
-                mean=[0.485, 0.456, 0.406],
-                std=[0.229, 0.224, 0.225],
-            ),
-        ])
-
-        model = model.to(device)
         all_embs = []
-
         for i in range(0, len(frames), batch_size):
-            batch_frames = frames[i : i + batch_size]
-            tensors = []
-            for f in batch_frames:
-                # BGR → RGB
-                rgb = f[:, :, ::-1].astype(np.uint8)
-                img = Image.fromarray(rgb)
-                tensors.append(preprocess(img))
-
-            batch_tensor = torch.stack(tensors).to(device)
+            batch = frames[i:i + batch_size]
+            imgs = [
+                Image.fromarray(f[:, :, ::-1].astype(np.uint8))
+                for f in batch
+            ]
+            inputs = processor(images=imgs, return_tensors="pt")
             with torch.no_grad():
-                emb = model(batch_tensor)  # (B, 384)
-            all_embs.append(emb.cpu().numpy())
+                out = model(**inputs)
+            cls = out.last_hidden_state[:, 0, :].numpy()
+            all_embs.append(cls.astype(np.float32))
 
-        return np.concatenate(all_embs, axis=0).astype(np.float32)
+        return np.concatenate(all_embs, axis=0)
 
     except Exception as e:
         logger.warning(f"DINOv2 embedding failed: {e}")
         return None
 
 
-def _compute_trajectory_features(embeddings: np.ndarray) -> dict:
+# ─── Feature computation ──────────────────────────────────────────────────────
+
+def _compute_features_26d(embeddings: np.ndarray) -> dict:
     """
-    Compute 21-D perceptual straightening features from frame embeddings.
+    Compute 26-D length-independent trajectory features.
 
-    Args:
-        embeddings: (N, D) float32 array, N >= 3
-
-    Returns:
-        dict with keys: distances, angles, features_21d,
-                        mean_theta, mean_dist
+    Layout:
+      [0:7]   7 stepwise L2 distances
+      [7:13]  6 turning angles (curvature)
+      [13:17] 4 L2 distance stats
+      [17:21] 4 angle stats
+      [21:25] 4 cosine similarity stats
+      [25]    straightness index
     """
     N = len(embeddings)
+    zero = np.zeros(FEAT_DIM, dtype=np.float32)
     if N < 3:
-        return {"mean_theta": 0.0, "mean_dist": 0.0, "features_21d": np.zeros(21)}
+        return {
+            "features_26d": zero,
+            "mean_theta": 0.0, "max_theta": 0.0, "var_theta": 0.0,
+            "mean_dist": 0.0, "mean_cos_sim": 1.0, "straightness": 1.0,
+        }
 
-    # Stepwise L2 distances
-    diffs = embeddings[1:] - embeddings[:-1]        # (N-1, D)
-    distances = np.linalg.norm(diffs, axis=1)        # (N-1,)
+    diffs = embeddings[1:] - embeddings[:-1]
+    l2_dist = np.linalg.norm(diffs, axis=1).astype(np.float32)
 
-    # Turning angles between consecutive displacement vectors
-    # theta[i] = acos( diffs[i] · diffs[i+1] / (||diffs[i]|| * ||diffs[i+1]||) )
+    # Turning angles (curvature)
     angles = []
     for i in range(len(diffs) - 1):
-        n1 = distances[i]
-        n2 = distances[i + 1]
+        n1, n2 = l2_dist[i], l2_dist[i + 1]
         if n1 < 1e-8 or n2 < 1e-8:
             angles.append(0.0)
             continue
-        cos_theta = float(np.dot(diffs[i], diffs[i + 1]) / (n1 * n2))
-        cos_theta = np.clip(cos_theta, -1.0, 1.0)
-        angles.append(float(np.arccos(cos_theta)))
-
+        cos_t = float(np.dot(diffs[i], diffs[i + 1]) / (n1 * n2))
+        angles.append(float(np.arccos(np.clip(cos_t, -1.0, 1.0))))
     angles = np.array(angles, dtype=np.float32)
-    distances = distances.astype(np.float32)
 
-    # Build 21-D feature vector (pad with mean if shorter than 7)
+    # Cosine similarities between consecutive frames
+    norms = np.linalg.norm(embeddings, axis=1, keepdims=True) + 1e-8
+    normed = embeddings / norms
+    cos_sims = np.array([
+        float(np.dot(normed[i], normed[i + 1]))
+        for i in range(N - 1)
+    ], dtype=np.float32)
+
+    # Straightness index
+    total_path = float(np.sum(l2_dist)) + 1e-8
+    end_to_end = float(np.linalg.norm(embeddings[-1] - embeddings[0]))
+    straightness = float(end_to_end / total_path)
+
     def _pad7(arr):
-        arr = arr.tolist()
-        while len(arr) < 7:
-            arr.append(float(np.mean(arr)) if arr else 0.0)
-        return arr[:7]
+        lst = arr.tolist()
+        m = float(np.mean(lst)) if lst else 0.0
+        while len(lst) < 7: lst.append(m)
+        return lst[:7]
 
     def _pad6(arr):
-        arr = arr.tolist()
-        while len(arr) < 6:
-            arr.append(float(np.mean(arr)) if arr else 0.0)
-        return arr[:6]
+        lst = arr.tolist()
+        m = float(np.mean(lst)) if lst else 0.0
+        while len(lst) < 6: lst.append(m)
+        return lst[:6]
 
-    d7 = _pad7(distances)
-    t6 = _pad6(angles)
+    def _stats4(arr):
+        if len(arr) == 0: return [0.0, 0.0, 0.0, 0.0]
+        return [float(np.mean(arr)), float(np.min(arr)),
+                float(np.max(arr)), float(np.var(arr))]
 
-    # Summary stats
-    mu_d = float(np.mean(distances))
-    min_d = float(np.min(distances))
-    max_d = float(np.max(distances))
-    var_d = float(np.var(distances))
-
-    mu_t = float(np.mean(angles)) if len(angles) > 0 else 0.0
-    min_t = float(np.min(angles)) if len(angles) > 0 else 0.0
-    max_t = float(np.max(angles)) if len(angles) > 0 else 0.0
-    var_t = float(np.var(angles)) if len(angles) > 0 else 0.0
-
-    features_21d = np.array(
-        d7 + t6 + [mu_d, min_d, max_d, var_d, mu_t, min_t, max_t, var_t],
+    features_26d = np.array(
+        _pad7(l2_dist) + _pad6(angles) + _stats4(l2_dist)
+        + _stats4(angles) + _stats4(cos_sims) + [straightness],
         dtype=np.float32,
     )
 
     return {
-        "distances": distances,
-        "angles": angles,
-        "features_21d": features_21d,
-        "mean_theta": mu_t,
-        "mean_dist": mu_d,
-        "max_theta": max_t,
-        "var_theta": var_t,
+        "features_26d": features_26d,
+        "mean_theta": float(np.mean(angles)) if len(angles) > 0 else 0.0,
+        "max_theta": float(np.max(angles)) if len(angles) > 0 else 0.0,
+        "var_theta": float(np.var(angles)) if len(angles) > 0 else 0.0,
+        "mean_dist": float(np.mean(l2_dist)),
+        "mean_cos_sim": float(np.mean(cos_sims)),
+        "straightness": straightness,
     }
 
 
-def _geometry_to_ai_score(mean_theta: float, max_theta: float, var_theta: float) -> float:
-    """
-    Convert trajectory geometry to AI probability [0, 100].
+# ─── Score computation ────────────────────────────────────────────────────────
 
-    Primary signal: mean_theta (mean turning angle).
-    Secondary boost: max_theta and var_theta for extreme curvature events.
+def _mlp_score(features_26d: np.ndarray, mlp_model, mlp_scaler) -> float:
+    """Run MLP inference → AI probability [0, 100]. Returns -1 on failure."""
+    try:
+        import torch
+        feat = features_26d.copy()
+        if mlp_scaler is not None:
+            mean, scale = mlp_scaler
+            feat = (feat - mean) / (scale + 1e-8)
 
-    Calibration (empirical on benchmark dataset):
-      real avg mean_theta ≈ 0.10-0.20 rad → score ~10-35
-      AI   avg mean_theta ≈ 0.35-0.55 rad → score ~65-90
-    """
-    # Primary score from mean turning angle
+        x = torch.tensor(feat, dtype=torch.float32).unsqueeze(0)
+        mlp_model.eval()
+        with torch.no_grad():
+            logits = mlp_model(x)
+            proba = torch.softmax(logits, dim=1)[0, 1].item()
+        return round(proba * 100.0, 2)
+    except Exception as e:
+        logger.warning(f"MLP inference failed: {e}")
+        return -1.0
+
+
+def _heuristic_score(mean_theta: float, max_theta: float, var_theta: float) -> float:
+    """Fallback geometry-based heuristic score [0, 100]."""
     score = (mean_theta - _THETA_LOW) / (_THETA_HIGH - _THETA_LOW)
     score = float(np.clip(score, 0.0, 1.0)) * 100.0
-
-    # Secondary boost: if there are sharp directional reversals
-    if max_theta > 1.2:          # > 68 degrees = likely AI frame jump
+    if max_theta > 1.2:
         score = min(100.0, score + 10.0)
-    if var_theta > 0.05:         # high variance in turning = inconsistent motion
+    if var_theta > 0.05:
         score = min(100.0, score + 5.0)
-
     return round(score, 2)
 
 
+# ─── Main analyzer class ──────────────────────────────────────────────────────
+
 class ReStraVAnalyzer(BaseAnalyzer):
     """
-    Analyzes video frames using perceptual straightening in DINOv2 space.
+    Analyzes video frames using perceptual straightening in DINOv2 feature space.
 
-    Natural videos trace straight paths; AI-generated videos trace curved paths.
-    
-    Replaces the SigLIP-based FrameAnalyzer for full-video AI detection
-    (not just face-swap detection).
+    Primary: MLP classifier on 26-D trajectory features (length-bias free).
+    Fallback: geometry-based heuristic (mean_theta thresholding).
     """
 
-    def __init__(self, device: str = "auto"):
-        if device == "auto":
-            try:
-                import torch
-                if torch.backends.mps.is_available():
-                    self.device = "mps"
-                elif torch.cuda.is_available():
-                    self.device = "cuda"
-                else:
-                    self.device = "cpu"
-            except Exception:
-                self.device = "cpu"
-        else:
-            self.device = device
+    def __init__(self, device: str = "cpu"):
+        # Keep CPU to avoid MPS SIGSEGV; HF DINOv2 is fast enough on M-series
+        self.device = device
+        self._dinov2 = None
+        self._proc = None
+        self._mlp = None
+        self._scaler = None
 
-        self._model = None
-
-    def _load_model(self):
-        if self._model is not None:
-            return
-        self._model = _load_dinov2()
+    def _load_models(self):
+        if self._dinov2 is None:
+            self._dinov2, self._proc = _load_dinov2()
+        if self._mlp is None:
+            self._mlp, self._scaler = _load_mlp()
 
     def analyze(self, frames: List[np.ndarray], fps: float = 25.0) -> AnalyzerResult:
         """
-        Analyze a list of frames using perceptual straightening.
+        Analyze frames using perceptual straightening + MLP.
 
         Args:
             frames: list of (H, W, 3) BGR uint8 arrays
-            fps: original video FPS (used for timestamp calculation)
+            fps: original video FPS
 
         Returns:
             AnalyzerResult with score 0-100 (higher = more likely AI-generated)
@@ -274,31 +334,43 @@ class ReStraVAnalyzer(BaseAnalyzer):
                 score=50.0, findings=[], error="Too few frames for trajectory analysis"
             )
 
-        self._load_model()
+        self._load_models()
 
-        if self._model is None:
+        if self._dinov2 is None or self._proc is None:
             return AnalyzerResult(
                 score=50.0, findings=[], error="DINOv2 model unavailable"
             )
 
         # Extract DINOv2 embeddings
-        embeddings = _frames_to_dinov2_embeddings(frames, self._model, device=self.device)
+        embeddings = _frames_to_dinov2_embeddings(
+            frames, self._dinov2, self._proc
+        )
         if embeddings is None or len(embeddings) < 3:
             return AnalyzerResult(
                 score=50.0, findings=[], error="DINOv2 embedding extraction failed"
             )
 
-        # Compute trajectory geometry
-        traj = _compute_trajectory_features(embeddings)
+        # Compute 26-D trajectory features
+        traj = _compute_features_26d(embeddings)
         mean_theta = traj["mean_theta"]
         max_theta = traj["max_theta"]
         var_theta = traj["var_theta"]
         mean_dist = traj["mean_dist"]
+        mean_cos_sim = traj["mean_cos_sim"]
+        straightness = traj["straightness"]
+        features_26d = traj["features_26d"]
 
-        # Convert to AI score
-        score = _geometry_to_ai_score(mean_theta, max_theta, var_theta)
+        # Score: MLP preferred, heuristic as fallback
+        using_mlp = self._mlp is not None
+        if using_mlp:
+            score = _mlp_score(features_26d, self._mlp, self._scaler)
+            if score < 0:
+                score = _heuristic_score(mean_theta, max_theta, var_theta)
+                using_mlp = False
+        else:
+            score = _heuristic_score(mean_theta, max_theta, var_theta)
 
-        # Generate findings
+        # Findings
         findings: List[Finding] = []
 
         if mean_theta > 0.35:
@@ -314,7 +386,10 @@ class ReStraVAnalyzer(BaseAnalyzer):
                     "max_theta_rad": round(max_theta, 4),
                     "var_theta": round(var_theta, 5),
                     "mean_dist": round(mean_dist, 4),
+                    "mean_cos_sim": round(mean_cos_sim, 4),
+                    "straightness": round(straightness, 4),
                     "n_frames": len(frames),
+                    "mode": "mlp" if using_mlp else "heuristic",
                 },
             ))
 
@@ -329,10 +404,21 @@ class ReStraVAnalyzer(BaseAnalyzer):
                 metadata={"max_theta_rad": round(max_theta, 4)},
             ))
 
+        if straightness < 0.3 and score > 60:
+            findings.append(Finding(
+                type="low_straightness",
+                confidence=round(min(80.0, (1.0 - straightness) * 60 + 20), 1),
+                description=(
+                    f"軌跡の直線性が低い（straightness index: {straightness:.3f}）。"
+                    "AI生成動画は特徴空間での軌跡が迂回することが多い。"
+                ),
+                metadata={"straightness_index": round(straightness, 4)},
+            ))
+
         logger.info(
-            f"ReStraV: {len(frames)} frames, "
-            f"mean_θ={mean_theta:.3f}, max_θ={max_theta:.3f}, "
-            f"score={score}"
+            f"ReStraV: {len(frames)} frames, mean_θ={mean_theta:.3f}, "
+            f"straight={straightness:.3f}, cos_sim={mean_cos_sim:.3f}, "
+            f"score={score} ({'MLP' if using_mlp else 'heuristic'})"
         )
 
         return AnalyzerResult(score=score, findings=findings)

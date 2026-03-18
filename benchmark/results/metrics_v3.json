@@ -1,0 +1,30 @@
+{
+  "accuracy": 0.9056603773584906,
+  "precision": 1.0,
+  "recall": 0.8076923076923077,
+  "f1": 0.8936170212765957,
+  "auc_roc": 0.9814814814814816,
+  "confusion_matrix": [
+    [
+      27,
+      0
+    ],
+    [
+      5,
+      21
+    ]
+  ],
+  "n_total": 53,
+  "n_ai": 26,
+  "n_real": 27,
+  "short_accuracy": 0.9230769230769231,
+  "short_false_positives_real": 0,
+  "threshold": 50.0,
+  "weights": {
+    "restrav": 0.5,
+    "temporal": 0.15,
+    "audio": 0.15,
+    "c2pa": 0.1,
+    "metadata": 0.1
+  }
+}

@@ -90,3 +90,319 @@
 2026-03-18 08:50:55,352 INFO   Loaded. Missing=0, Unexpected=0
 2026-03-18 08:50:55,353 INFO   Processing: ai_generated_010_lEcg6AJ6DVY.mp4
 2026-03-18 08:51:06,551 INFO   Processing: ai_generated_010_pNMMFov2f_c.mp4
+2026-03-18 08:51:18,851 INFO   Processing: ai_generated_hv_M5c_UstkTtA.mp4
+2026-03-18 08:51:33,051 INFO   Processing: ai_generated_hv_N1eBvZZ7VFs.mp4
+2026-03-18 08:51:44,060 INFO   Processing: ai_generated_kg_ZqxP616nvIE.mp4
+2026-03-18 08:51:55,640 INFO   Processing: ai_generated_lm_FSdtckyFgkY.mp4
+2026-03-18 08:52:08,616 INFO   Processing: ai_generated_lm_UWmNlosnpo8.mp4
+2026-03-18 08:52:22,205 INFO   Processing: ai_generated_lm__jXj20wPzzk.mp4
+2026-03-18 08:52:35,847 INFO   Processing: ai_generated_lm_c-g9jOVPF2I.mp4
+2026-03-18 08:52:49,666 INFO   Processing: ai_generated_lm_eITpXDz8w4c.mp4
+2026-03-18 08:53:03,930 INFO   Processing: ai_generated_lm_eoZWVfOHH2o.mp4
+2026-03-18 08:53:18,404 INFO   Processing: ai_generated_mv_xoZG5WQbgMw.mp4
+2026-03-18 08:53:30,402 INFO   Processing: ai_generated_pk_J3ok75sKTLs.mp4
+2026-03-18 08:53:43,869 INFO   Processing: ai_generated_pk_VBFG1S7ZcBI.mp4
+2026-03-18 08:54:01,345 INFO   Processing: ai_generated_rw_7AN4D3iN7BA.mp4
+2026-03-18 08:54:16,833 INFO   Processing: ai_generated_rw_BJaToeEUueQ.mp4
+2026-03-18 08:54:29,441 INFO   Processing: ai_generated_rw_KUHx-2uz_qI.mp4
+2026-03-18 08:54:40,581 INFO   Processing: ai_generated_sv_0bQDQ_BR_mg.mp4
+2026-03-18 08:54:50,673 INFO   Processing: ai_generated_sv_8BGDqva_-VY.mp4
+2026-03-18 08:55:01,054 INFO   Processing: ai_generated_sv_lEcg6AJ6DVY.mp4
+2026-03-18 08:55:10,867 INFO   Processing: real_65KsVRG1ao8.mp4
+2026-03-18 08:55:20,961 INFO   Processing: real_D-F4L5Gfhik.mp4
+2026-03-18 08:55:30,800 INFO   Processing: real_KbnJSSm1oDk.mp4
+2026-03-18 08:55:40,664 INFO   Processing: real_Uwc8NvfLJfw.mp4
+2026-03-18 08:55:50,678 INFO   Processing: real_Xz0w9T-n9QE.mp4
+2026-03-18 08:56:00,539 INFO   Processing: real__ruYxJgMOqw.mp4
+2026-03-18 08:56:10,381 INFO   Processing: real_ca9uN3QyDmQ.mp4
+2026-03-18 08:56:20,038 INFO   Processing: real_d5k340m4jF4.mp4
+2026-03-18 08:56:29,900 INFO   Processing: real_lKvSo3Q-oUY.mp4
+2026-03-18 08:56:39,504 INFO   Processing: real_vlog_5y5uPLNIMzA.mp4
+2026-03-18 08:56:53,582 INFO   Processing: real_vlog_Hn_zXuCnDKc.mp4
+2026-03-18 08:57:10,466 INFO   Processing: real_vlog_LQtWRs8jdjs.mp4
+2026-03-18 08:57:25,210 INFO   Processing: real_vlog_WHNNHAoaZD4.mp4
+2026-03-18 08:57:38,374 INFO   Processing: real_vlog_camtTZFu5e8.mp4
+2026-03-18 08:57:50,820 INFO   Processing: real_vlog_exI_hD_4jAM.mp4
+2026-03-18 08:58:03,219 INFO   Processing: real_vlog_lIHNSOklgls.mp4
+2026-03-18 08:58:16,443 INFO   Processing: real_vlog_q8DpEhLMLYI.mp4
+2026-03-18 08:58:29,324 INFO   Processing: real_vlog_xLTCivIB4kU.mp4
+2026-03-18 08:58:41,663 INFO   Processing: real_vlog_yqHXl13SMr4.mp4
+2026-03-18 08:58:54,088 INFO   Processing: real_zAfVNkSRSM4.mp4
+2026-03-18 08:59:06,357 INFO 
+=== 4/8: RECCE (CVPR 2022, DeepfakeBench) ===
+2026-03-18 08:59:06,654 INFO   Loaded. Missing=36, Unexpected=14
+2026-03-18 08:59:06,655 INFO   Processing: ai_generated_010_lEcg6AJ6DVY.mp4
+2026-03-18 08:59:17,007 INFO   Processing: ai_generated_010_pNMMFov2f_c.mp4
+2026-03-18 08:59:27,523 INFO   Processing: ai_generated_hv_M5c_UstkTtA.mp4
+2026-03-18 08:59:37,489 INFO   Processing: ai_generated_hv_N1eBvZZ7VFs.mp4
+2026-03-18 08:59:45,472 INFO   Processing: ai_generated_kg_ZqxP616nvIE.mp4
+2026-03-18 08:59:55,385 INFO   Processing: ai_generated_lm_FSdtckyFgkY.mp4
+2026-03-18 09:00:05,518 INFO   Processing: ai_generated_lm_UWmNlosnpo8.mp4
+2026-03-18 09:00:15,296 INFO   Processing: ai_generated_lm__jXj20wPzzk.mp4
+2026-03-18 09:00:23,730 INFO   Processing: ai_generated_lm_c-g9jOVPF2I.mp4
+2026-03-18 09:00:34,635 INFO   Processing: ai_generated_lm_eITpXDz8w4c.mp4
+2026-03-18 09:00:49,044 INFO   Processing: ai_generated_lm_eoZWVfOHH2o.mp4
+2026-03-18 09:01:02,298 INFO   Processing: ai_generated_mv_xoZG5WQbgMw.mp4
+2026-03-18 09:01:13,724 INFO   Processing: ai_generated_pk_J3ok75sKTLs.mp4
+2026-03-18 09:01:24,630 INFO   Processing: ai_generated_pk_VBFG1S7ZcBI.mp4
+2026-03-18 09:01:36,055 INFO   Processing: ai_generated_rw_7AN4D3iN7BA.mp4
+2026-03-18 09:01:47,782 INFO   Processing: ai_generated_rw_BJaToeEUueQ.mp4
+2026-03-18 09:01:57,291 INFO   Processing: ai_generated_rw_KUHx-2uz_qI.mp4
+2026-03-18 09:02:06,704 INFO   Processing: ai_generated_sv_0bQDQ_BR_mg.mp4
+2026-03-18 09:02:15,666 INFO   Processing: ai_generated_sv_8BGDqva_-VY.mp4
+2026-03-18 09:02:25,250 INFO   Processing: ai_generated_sv_lEcg6AJ6DVY.mp4
+2026-03-18 09:02:38,126 INFO   Processing: real_65KsVRG1ao8.mp4
+2026-03-18 09:02:53,193 INFO   Processing: real_D-F4L5Gfhik.mp4
+2026-03-18 09:03:07,305 INFO   Processing: real_KbnJSSm1oDk.mp4
+2026-03-18 09:03:20,223 INFO   Processing: real_Uwc8NvfLJfw.mp4
+2026-03-18 09:03:33,073 INFO   Processing: real_Xz0w9T-n9QE.mp4
+2026-03-18 09:03:45,905 INFO   Processing: real__ruYxJgMOqw.mp4
+2026-03-18 09:04:01,485 INFO   Processing: real_ca9uN3QyDmQ.mp4
+2026-03-18 09:04:19,111 INFO   Processing: real_d5k340m4jF4.mp4
+2026-03-18 09:04:35,970 INFO   Processing: real_lKvSo3Q-oUY.mp4
+2026-03-18 09:04:55,053 INFO   Processing: real_vlog_5y5uPLNIMzA.mp4
+2026-03-18 09:05:13,593 INFO   Processing: real_vlog_Hn_zXuCnDKc.mp4
+2026-03-18 09:05:31,167 INFO   Processing: real_vlog_LQtWRs8jdjs.mp4
+2026-03-18 09:05:49,215 INFO   Processing: real_vlog_WHNNHAoaZD4.mp4
+2026-03-18 09:06:09,643 INFO   Processing: real_vlog_camtTZFu5e8.mp4
+2026-03-18 09:06:29,197 INFO   Processing: real_vlog_exI_hD_4jAM.mp4
+2026-03-18 09:06:47,234 INFO   Processing: real_vlog_lIHNSOklgls.mp4
+2026-03-18 09:07:09,399 INFO   Processing: real_vlog_q8DpEhLMLYI.mp4
+2026-03-18 09:07:28,441 INFO   Processing: real_vlog_xLTCivIB4kU.mp4
+2026-03-18 09:07:45,879 INFO   Processing: real_vlog_yqHXl13SMr4.mp4
+2026-03-18 09:08:01,956 INFO   Processing: real_zAfVNkSRSM4.mp4
+2026-03-18 09:08:17,839 INFO 
+=== 5/8: UCF encoder_f (ICCV 2023, DeepfakeBench) ===
+2026-03-18 09:08:18,465 INFO   Loaded. Missing=36, Unexpected=14
+2026-03-18 09:08:18,467 INFO   Processing: ai_generated_010_lEcg6AJ6DVY.mp4
+2026-03-18 09:08:35,904 INFO   Processing: ai_generated_010_pNMMFov2f_c.mp4
+2026-03-18 09:08:52,520 INFO   Processing: ai_generated_hv_M5c_UstkTtA.mp4
+2026-03-18 09:09:10,284 INFO   Processing: ai_generated_hv_N1eBvZZ7VFs.mp4
+2026-03-18 09:09:23,755 INFO   Processing: ai_generated_kg_ZqxP616nvIE.mp4
+2026-03-18 09:09:41,201 INFO   Processing: ai_generated_lm_FSdtckyFgkY.mp4
+2026-03-18 09:09:58,442 INFO   Processing: ai_generated_lm_UWmNlosnpo8.mp4
+2026-03-18 09:10:13,866 INFO   Processing: ai_generated_lm__jXj20wPzzk.mp4
+2026-03-18 09:10:28,522 INFO   Processing: ai_generated_lm_c-g9jOVPF2I.mp4
+2026-03-18 09:10:42,333 INFO   Processing: ai_generated_lm_eITpXDz8w4c.mp4
+2026-03-18 09:10:57,557 INFO   Processing: ai_generated_lm_eoZWVfOHH2o.mp4
+2026-03-18 09:11:11,031 INFO   Processing: ai_generated_mv_xoZG5WQbgMw.mp4
+2026-03-18 09:11:23,521 INFO   Processing: ai_generated_pk_J3ok75sKTLs.mp4
+2026-03-18 09:11:37,506 INFO   Processing: ai_generated_pk_VBFG1S7ZcBI.mp4
+2026-03-18 09:11:48,117 INFO   Processing: ai_generated_rw_7AN4D3iN7BA.mp4
+2026-03-18 09:11:57,416 INFO   Processing: ai_generated_rw_BJaToeEUueQ.mp4
+2026-03-18 09:12:06,674 INFO   Processing: ai_generated_rw_KUHx-2uz_qI.mp4
+2026-03-18 09:12:16,031 INFO   Processing: ai_generated_sv_0bQDQ_BR_mg.mp4
+2026-03-18 09:12:25,715 INFO   Processing: ai_generated_sv_8BGDqva_-VY.mp4
+2026-03-18 09:12:35,352 INFO   Processing: ai_generated_sv_lEcg6AJ6DVY.mp4
+2026-03-18 09:12:46,778 INFO   Processing: real_65KsVRG1ao8.mp4
+2026-03-18 09:12:59,362 INFO   Processing: real_D-F4L5Gfhik.mp4
+2026-03-18 09:13:11,221 INFO   Processing: real_KbnJSSm1oDk.mp4
+2026-03-18 09:13:22,942 INFO   Processing: real_Uwc8NvfLJfw.mp4
+2026-03-18 09:13:34,840 INFO   Processing: real_Xz0w9T-n9QE.mp4
+2026-03-18 09:13:46,345 INFO   Processing: real__ruYxJgMOqw.mp4
+2026-03-18 09:13:57,235 INFO   Processing: real_ca9uN3QyDmQ.mp4
+2026-03-18 09:14:08,889 INFO   Processing: real_d5k340m4jF4.mp4
+2026-03-18 09:14:20,486 INFO   Processing: real_lKvSo3Q-oUY.mp4
+2026-03-18 09:14:32,397 INFO   Processing: real_vlog_5y5uPLNIMzA.mp4
+2026-03-18 09:14:43,738 INFO   Processing: real_vlog_Hn_zXuCnDKc.mp4
+2026-03-18 09:14:55,345 INFO   Processing: real_vlog_LQtWRs8jdjs.mp4
+2026-03-18 09:15:07,225 INFO   Processing: real_vlog_WHNNHAoaZD4.mp4
+2026-03-18 09:15:19,031 INFO   Processing: real_vlog_camtTZFu5e8.mp4
+2026-03-18 09:15:30,683 INFO   Processing: real_vlog_exI_hD_4jAM.mp4
+2026-03-18 09:15:42,518 INFO   Processing: real_vlog_lIHNSOklgls.mp4
+2026-03-18 09:15:54,759 INFO   Processing: real_vlog_q8DpEhLMLYI.mp4
+2026-03-18 09:16:06,684 INFO   Processing: real_vlog_xLTCivIB4kU.mp4
+2026-03-18 09:16:19,255 INFO   Processing: real_vlog_yqHXl13SMr4.mp4
+2026-03-18 09:16:31,946 INFO   Processing: real_zAfVNkSRSM4.mp4
+2026-03-18 09:16:44,930 INFO 
+=== 6/8: ViT Deepfake vs Real (dima806, HuggingFace) ===
+2026-03-18 09:16:50,478 INFO HTTP Request: HEAD https://huggingface.co/dima806/deepfake_vs_real_image_detection/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-03-18 09:16:50,645 INFO HTTP Request: HEAD https://huggingface.co/dima806/deepfake_vs_real_image_detection/resolve/main/preprocessor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-18 09:16:50,657 INFO HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/dima806/deepfake_vs_real_image_detection/29e4cf9efc543845610045f6ba7e88e5cf9d9301/preprocessor_config.json "HTTP/1.1 200 OK"
+2026-03-18 09:16:50,672 INFO HTTP Request: GET https://huggingface.co/api/resolve-cache/models/dima806/deepfake_vs_real_image_detection/29e4cf9efc543845610045f6ba7e88e5cf9d9301/preprocessor_config.json "HTTP/1.1 200 OK"
+The image processor of type `ViTImageProcessor` is now loaded as a fast processor by default, even if the model checkpoint was saved with a slow processor. This is a breaking change and may produce slightly different outputs. To continue using the slow processor, instantiate this class with `use_fast=False`. 
+2026-03-18 09:16:50,931 INFO HTTP Request: HEAD https://huggingface.co/dima806/deepfake_vs_real_image_detection/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-03-18 09:16:51,108 INFO HTTP Request: HEAD https://huggingface.co/dima806/deepfake_vs_real_image_detection/resolve/main/preprocessor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-18 09:16:51,124 INFO HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/dima806/deepfake_vs_real_image_detection/29e4cf9efc543845610045f6ba7e88e5cf9d9301/preprocessor_config.json "HTTP/1.1 200 OK"
+2026-03-18 09:16:51,298 INFO HTTP Request: HEAD https://huggingface.co/dima806/deepfake_vs_real_image_detection/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-18 09:16:51,313 INFO HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/dima806/deepfake_vs_real_image_detection/29e4cf9efc543845610045f6ba7e88e5cf9d9301/config.json "HTTP/1.1 200 OK"
+2026-03-18 09:16:51,331 INFO HTTP Request: GET https://huggingface.co/api/resolve-cache/models/dima806/deepfake_vs_real_image_detection/29e4cf9efc543845610045f6ba7e88e5cf9d9301/config.json "HTTP/1.1 200 OK"
+2026-03-18 09:16:51,573 INFO HTTP Request: HEAD https://huggingface.co/dima806/deepfake_vs_real_image_detection/resolve/main/model.safetensors "HTTP/1.1 302 Found"
+2026-03-18 09:16:51,795 INFO HTTP Request: GET https://huggingface.co/api/models/dima806/deepfake_vs_real_image_detection/xet-read-token/29e4cf9efc543845610045f6ba7e88e5cf9d9301 "HTTP/1.1 200 OK"
+Loading weights:   0%|          | 0/200 [00:00<?, ?it/s]Loading weights: 100%|██████████| 200/200 [00:00<00:00, 5593.45it/s]
+2026-03-18 09:17:09,964 INFO   Labels: {0: 'Real', 1: 'Fake'}
+2026-03-18 09:17:09,965 INFO   Processing: ai_generated_010_lEcg6AJ6DVY.mp4
+2026-03-18 09:17:11,367 INFO   Processing: ai_generated_010_pNMMFov2f_c.mp4
+2026-03-18 09:17:12,745 INFO   Processing: ai_generated_hv_M5c_UstkTtA.mp4
+2026-03-18 09:17:13,885 INFO   Processing: ai_generated_hv_N1eBvZZ7VFs.mp4
+2026-03-18 09:17:14,809 INFO   Processing: ai_generated_kg_ZqxP616nvIE.mp4
+2026-03-18 09:17:15,924 INFO   Processing: ai_generated_lm_FSdtckyFgkY.mp4
+2026-03-18 09:17:17,163 INFO   Processing: ai_generated_lm_UWmNlosnpo8.mp4
+2026-03-18 09:17:18,350 INFO   Processing: ai_generated_lm__jXj20wPzzk.mp4
+2026-03-18 09:17:19,474 INFO   Processing: ai_generated_lm_c-g9jOVPF2I.mp4
+2026-03-18 09:17:20,610 INFO   Processing: ai_generated_lm_eITpXDz8w4c.mp4
+2026-03-18 09:17:21,560 INFO   Processing: ai_generated_lm_eoZWVfOHH2o.mp4
+2026-03-18 09:17:22,583 INFO   Processing: ai_generated_mv_xoZG5WQbgMw.mp4
+2026-03-18 09:17:23,541 INFO   Processing: ai_generated_pk_J3ok75sKTLs.mp4
+2026-03-18 09:17:24,778 INFO   Processing: ai_generated_pk_VBFG1S7ZcBI.mp4
+2026-03-18 09:17:25,724 INFO   Processing: ai_generated_rw_7AN4D3iN7BA.mp4
+2026-03-18 09:17:26,686 INFO   Processing: ai_generated_rw_BJaToeEUueQ.mp4
+2026-03-18 09:17:27,607 INFO   Processing: ai_generated_rw_KUHx-2uz_qI.mp4
+2026-03-18 09:17:28,629 INFO   Processing: ai_generated_sv_0bQDQ_BR_mg.mp4
+2026-03-18 09:17:29,570 INFO   Processing: ai_generated_sv_8BGDqva_-VY.mp4
+2026-03-18 09:17:30,511 INFO   Processing: ai_generated_sv_lEcg6AJ6DVY.mp4
+2026-03-18 09:17:31,661 INFO   Processing: real_65KsVRG1ao8.mp4
+2026-03-18 09:17:32,678 INFO   Processing: real_D-F4L5Gfhik.mp4
+2026-03-18 09:17:33,984 INFO   Processing: real_KbnJSSm1oDk.mp4
+2026-03-18 09:17:35,009 INFO   Processing: real_Uwc8NvfLJfw.mp4
+2026-03-18 09:17:36,151 INFO   Processing: real_Xz0w9T-n9QE.mp4
+2026-03-18 09:17:37,136 INFO   Processing: real__ruYxJgMOqw.mp4
+2026-03-18 09:17:38,167 INFO   Processing: real_ca9uN3QyDmQ.mp4
+2026-03-18 09:17:39,294 INFO   Processing: real_d5k340m4jF4.mp4
+2026-03-18 09:17:40,435 INFO   Processing: real_lKvSo3Q-oUY.mp4
+2026-03-18 09:17:41,469 INFO   Processing: real_vlog_5y5uPLNIMzA.mp4
+2026-03-18 09:17:42,493 INFO   Processing: real_vlog_Hn_zXuCnDKc.mp4
+2026-03-18 09:17:43,498 INFO   Processing: real_vlog_LQtWRs8jdjs.mp4
+2026-03-18 09:17:44,475 INFO   Processing: real_vlog_WHNNHAoaZD4.mp4
+2026-03-18 09:17:45,490 INFO   Processing: real_vlog_camtTZFu5e8.mp4
+2026-03-18 09:17:46,485 INFO   Processing: real_vlog_exI_hD_4jAM.mp4
+2026-03-18 09:17:47,651 INFO   Processing: real_vlog_lIHNSOklgls.mp4
+2026-03-18 09:17:48,637 INFO   Processing: real_vlog_q8DpEhLMLYI.mp4
+2026-03-18 09:17:49,741 INFO   Processing: real_vlog_xLTCivIB4kU.mp4
+2026-03-18 09:17:51,030 INFO   Processing: real_vlog_yqHXl13SMr4.mp4
+2026-03-18 09:17:52,158 INFO   Processing: real_zAfVNkSRSM4.mp4
+2026-03-18 09:17:53,379 INFO 
+=== 7/8: ViT AI vs Human (dima806, HuggingFace) ===
+2026-03-18 09:17:53,570 INFO HTTP Request: HEAD https://huggingface.co/dima806/ai_vs_human_generated_image_detection/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-03-18 09:17:53,570 WARNING Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+2026-03-18 09:17:53,747 INFO HTTP Request: HEAD https://huggingface.co/dima806/ai_vs_human_generated_image_detection/resolve/main/preprocessor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-18 09:17:53,765 INFO HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/dima806/ai_vs_human_generated_image_detection/341594f2b003d185db789becf48a2286c177b926/preprocessor_config.json "HTTP/1.1 200 OK"
+2026-03-18 09:17:53,933 INFO HTTP Request: GET https://huggingface.co/api/resolve-cache/models/dima806/ai_vs_human_generated_image_detection/341594f2b003d185db789becf48a2286c177b926/preprocessor_config.json "HTTP/1.1 200 OK"
+2026-03-18 09:17:54,111 INFO HTTP Request: HEAD https://huggingface.co/dima806/ai_vs_human_generated_image_detection/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-03-18 09:17:54,286 INFO HTTP Request: HEAD https://huggingface.co/dima806/ai_vs_human_generated_image_detection/resolve/main/preprocessor_config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-18 09:17:54,300 INFO HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/dima806/ai_vs_human_generated_image_detection/341594f2b003d185db789becf48a2286c177b926/preprocessor_config.json "HTTP/1.1 200 OK"
+2026-03-18 09:17:54,471 INFO HTTP Request: HEAD https://huggingface.co/dima806/ai_vs_human_generated_image_detection/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+2026-03-18 09:17:54,487 INFO HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/dima806/ai_vs_human_generated_image_detection/341594f2b003d185db789becf48a2286c177b926/config.json "HTTP/1.1 200 OK"
+2026-03-18 09:17:54,657 INFO HTTP Request: GET https://huggingface.co/api/resolve-cache/models/dima806/ai_vs_human_generated_image_detection/341594f2b003d185db789becf48a2286c177b926/config.json "HTTP/1.1 200 OK"
+2026-03-18 09:17:54,851 INFO HTTP Request: HEAD https://huggingface.co/dima806/ai_vs_human_generated_image_detection/resolve/main/model.safetensors "HTTP/1.1 302 Found"
+2026-03-18 09:17:55,331 INFO HTTP Request: GET https://huggingface.co/api/models/dima806/ai_vs_human_generated_image_detection/xet-read-token/341594f2b003d185db789becf48a2286c177b926 "HTTP/1.1 200 OK"
+Loading weights:   0%|          | 0/200 [00:00<?, ?it/s]Loading weights: 100%|██████████| 200/200 [00:00<00:00, 7241.61it/s]
+2026-03-18 09:18:12,261 INFO   Labels: {0: 'human', 1: 'AI-generated'}
+2026-03-18 09:18:12,261 INFO   Processing: ai_generated_010_lEcg6AJ6DVY.mp4
+2026-03-18 09:18:13,099 INFO   Processing: ai_generated_010_pNMMFov2f_c.mp4
+2026-03-18 09:18:13,956 INFO   Processing: ai_generated_hv_M5c_UstkTtA.mp4
+2026-03-18 09:18:14,716 INFO   Processing: ai_generated_hv_N1eBvZZ7VFs.mp4
+2026-03-18 09:18:15,331 INFO   Processing: ai_generated_kg_ZqxP616nvIE.mp4
+2026-03-18 09:18:16,081 INFO   Processing: ai_generated_lm_FSdtckyFgkY.mp4
+2026-03-18 09:18:16,818 INFO   Processing: ai_generated_lm_UWmNlosnpo8.mp4
+2026-03-18 09:18:17,492 INFO   Processing: ai_generated_lm__jXj20wPzzk.mp4
+2026-03-18 09:18:18,306 INFO   Processing: ai_generated_lm_c-g9jOVPF2I.mp4
+2026-03-18 09:18:19,083 INFO   Processing: ai_generated_lm_eITpXDz8w4c.mp4
+2026-03-18 09:18:19,925 INFO   Processing: ai_generated_lm_eoZWVfOHH2o.mp4
+2026-03-18 09:18:20,741 INFO   Processing: ai_generated_mv_xoZG5WQbgMw.mp4
+2026-03-18 09:18:21,529 INFO   Processing: ai_generated_pk_J3ok75sKTLs.mp4
+2026-03-18 09:18:22,368 INFO   Processing: ai_generated_pk_VBFG1S7ZcBI.mp4
+2026-03-18 09:18:23,190 INFO   Processing: ai_generated_rw_7AN4D3iN7BA.mp4
+2026-03-18 09:18:24,128 INFO   Processing: ai_generated_rw_BJaToeEUueQ.mp4
+2026-03-18 09:18:25,067 INFO   Processing: ai_generated_rw_KUHx-2uz_qI.mp4
+2026-03-18 09:18:25,926 INFO   Processing: ai_generated_sv_0bQDQ_BR_mg.mp4
+2026-03-18 09:18:26,898 INFO   Processing: ai_generated_sv_8BGDqva_-VY.mp4
+2026-03-18 09:18:27,883 INFO   Processing: ai_generated_sv_lEcg6AJ6DVY.mp4
+2026-03-18 09:18:28,863 INFO   Processing: real_65KsVRG1ao8.mp4
+2026-03-18 09:18:29,873 INFO   Processing: real_D-F4L5Gfhik.mp4
+2026-03-18 09:18:30,871 INFO   Processing: real_KbnJSSm1oDk.mp4
+2026-03-18 09:18:31,906 INFO   Processing: real_Uwc8NvfLJfw.mp4
+2026-03-18 09:18:32,875 INFO   Processing: real_Xz0w9T-n9QE.mp4
+2026-03-18 09:18:33,891 INFO   Processing: real__ruYxJgMOqw.mp4
+2026-03-18 09:18:34,970 INFO   Processing: real_ca9uN3QyDmQ.mp4
+2026-03-18 09:18:36,164 INFO   Processing: real_d5k340m4jF4.mp4
+2026-03-18 09:18:37,210 INFO   Processing: real_lKvSo3Q-oUY.mp4
+2026-03-18 09:18:38,169 INFO   Processing: real_vlog_5y5uPLNIMzA.mp4
+2026-03-18 09:18:39,235 INFO   Processing: real_vlog_Hn_zXuCnDKc.mp4
+2026-03-18 09:18:40,250 INFO   Processing: real_vlog_LQtWRs8jdjs.mp4
+2026-03-18 09:18:41,123 INFO   Processing: real_vlog_WHNNHAoaZD4.mp4
+2026-03-18 09:18:42,091 INFO   Processing: real_vlog_camtTZFu5e8.mp4
+2026-03-18 09:18:43,006 INFO   Processing: real_vlog_exI_hD_4jAM.mp4
+2026-03-18 09:18:43,965 INFO   Processing: real_vlog_lIHNSOklgls.mp4
+2026-03-18 09:18:44,969 INFO   Processing: real_vlog_q8DpEhLMLYI.mp4
+2026-03-18 09:18:45,949 INFO   Processing: real_vlog_xLTCivIB4kU.mp4
+2026-03-18 09:18:47,141 INFO   Processing: real_vlog_yqHXl13SMr4.mp4
+2026-03-18 09:18:48,082 INFO   Processing: real_zAfVNkSRSM4.mp4
+2026-03-18 09:18:49,212 INFO 
+=== 8/8: Swin AI Image Detector (umm-maybe, HuggingFace) ===
+2026-03-18 09:18:52,508 INFO HTTP Request: HEAD https://huggingface.co/umm-maybe/AI-image-detector/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-03-18 09:18:52,706 INFO HTTP Request: HEAD https://huggingface.co/umm-maybe/AI-image-detector/resolve/main/preprocessor_config.json "HTTP/1.1 302 Found"
+2026-03-18 09:18:52,877 INFO HTTP Request: GET https://huggingface.co/api/models/umm-maybe/AI-image-detector/xet-read-token/c7e223baf11bc40528af364ba7bdea030ef42f9e "HTTP/1.1 200 OK"
+2026-03-18 09:18:53,463 INFO HTTP Request: HEAD https://huggingface.co/umm-maybe/AI-image-detector/resolve/main/processor_config.json "HTTP/1.1 404 Not Found"
+2026-03-18 09:18:53,645 INFO HTTP Request: HEAD https://huggingface.co/umm-maybe/AI-image-detector/resolve/main/preprocessor_config.json "HTTP/1.1 302 Found"
+2026-03-18 09:18:53,819 INFO HTTP Request: HEAD https://huggingface.co/umm-maybe/AI-image-detector/resolve/main/config.json "HTTP/1.1 302 Found"
+2026-03-18 09:18:54,427 INFO HTTP Request: HEAD https://huggingface.co/umm-maybe/AI-image-detector/resolve/main/model.safetensors "HTTP/1.1 404 Not Found"
+2026-03-18 09:18:54,593 INFO HTTP Request: HEAD https://huggingface.co/umm-maybe/AI-image-detector/resolve/main/model.safetensors.index.json "HTTP/1.1 404 Not Found"
+2026-03-18 09:18:54,766 INFO HTTP Request: HEAD https://huggingface.co/umm-maybe/AI-image-detector/resolve/main/pytorch_model.bin "HTTP/1.1 302 Found"
+2026-03-18 09:19:09,764 INFO HTTP Request: HEAD https://huggingface.co/umm-maybe/AI-image-detector/resolve/main/model.safetensors "HTTP/1.1 404 Not Found"
+2026-03-18 09:19:09,954 INFO HTTP Request: GET https://huggingface.co/api/models/umm-maybe/AI-image-detector "HTTP/1.1 200 OK"
+2026-03-18 09:19:10,167 INFO HTTP Request: GET https://huggingface.co/api/models/umm-maybe/AI-image-detector/commits/main "HTTP/1.1 200 OK"
+2026-03-18 09:19:10,358 INFO HTTP Request: GET https://huggingface.co/api/models/umm-maybe/AI-image-detector/discussions?p=0 "HTTP/1.1 200 OK"
+Loading weights:   0%|          | 0/449 [00:00<?, ?it/s]Loading weights: 100%|██████████| 449/449 [00:00<00:00, 15951.44it/s]
+2026-03-18 09:19:10,497 INFO   Labels: {0: 'artificial', 1: 'human'}
+2026-03-18 09:19:10,497 INFO   Processing: ai_generated_010_lEcg6AJ6DVY.mp4
+2026-03-18 09:19:10,540 INFO HTTP Request: GET https://huggingface.co/api/models/umm-maybe/AI-image-detector/commits/refs%2Fpr%2F4 "HTTP/1.1 200 OK"
+2026-03-18 09:19:10,717 INFO HTTP Request: HEAD https://huggingface.co/umm-maybe/AI-image-detector/resolve/refs%2Fpr%2F4/model.safetensors.index.json "HTTP/1.1 404 Not Found"
+2026-03-18 09:19:10,905 INFO HTTP Request: HEAD https://huggingface.co/umm-maybe/AI-image-detector/resolve/refs%2Fpr%2F4/model.safetensors "HTTP/1.1 302 Found"
+2026-03-18 09:19:11,084 INFO HTTP Request: GET https://huggingface.co/api/models/umm-maybe/AI-image-detector/xet-read-token/2d342e5ebb6296e1a1d5ef574e5fb252c933c042 "HTTP/1.1 200 OK"
+2026-03-18 09:19:16,592 INFO   Processing: ai_generated_010_pNMMFov2f_c.mp4
+2026-03-18 09:19:24,040 INFO   Processing: ai_generated_hv_M5c_UstkTtA.mp4
+2026-03-18 09:19:30,421 INFO   Processing: ai_generated_hv_N1eBvZZ7VFs.mp4
+2026-03-18 09:19:34,298 INFO   Processing: ai_generated_kg_ZqxP616nvIE.mp4
+2026-03-18 09:19:39,873 INFO   Processing: ai_generated_lm_FSdtckyFgkY.mp4
+2026-03-18 09:19:45,572 INFO   Processing: ai_generated_lm_UWmNlosnpo8.mp4
+2026-03-18 09:19:51,375 INFO   Processing: ai_generated_lm__jXj20wPzzk.mp4
+2026-03-18 09:19:57,315 INFO   Processing: ai_generated_lm_c-g9jOVPF2I.mp4
+2026-03-18 09:20:03,796 INFO   Processing: ai_generated_lm_eITpXDz8w4c.mp4
+2026-03-18 09:20:08,358 INFO   Processing: ai_generated_lm_eoZWVfOHH2o.mp4
+2026-03-18 09:20:10,041 INFO   Processing: ai_generated_mv_xoZG5WQbgMw.mp4
+2026-03-18 09:20:11,611 INFO   Processing: ai_generated_pk_J3ok75sKTLs.mp4
+2026-03-18 09:20:13,162 INFO   Processing: ai_generated_pk_VBFG1S7ZcBI.mp4
+2026-03-18 09:20:14,833 INFO   Processing: ai_generated_rw_7AN4D3iN7BA.mp4
+2026-03-18 09:20:16,391 INFO   Processing: ai_generated_rw_BJaToeEUueQ.mp4
+2026-03-18 09:20:18,176 INFO   Processing: ai_generated_rw_KUHx-2uz_qI.mp4
+2026-03-18 09:20:19,666 INFO   Processing: ai_generated_sv_0bQDQ_BR_mg.mp4
+2026-03-18 09:20:20,954 INFO   Processing: ai_generated_sv_8BGDqva_-VY.mp4
+2026-03-18 09:20:22,341 INFO   Processing: ai_generated_sv_lEcg6AJ6DVY.mp4
+2026-03-18 09:20:23,994 INFO   Processing: real_65KsVRG1ao8.mp4
+2026-03-18 09:20:25,830 INFO   Processing: real_D-F4L5Gfhik.mp4
+2026-03-18 09:20:27,730 INFO   Processing: real_KbnJSSm1oDk.mp4
+2026-03-18 09:20:29,575 INFO   Processing: real_Uwc8NvfLJfw.mp4
+2026-03-18 09:20:31,228 INFO   Processing: real_Xz0w9T-n9QE.mp4
+2026-03-18 09:20:34,649 INFO   Processing: real__ruYxJgMOqw.mp4
+2026-03-18 09:20:40,183 INFO   Processing: real_ca9uN3QyDmQ.mp4
+2026-03-18 09:20:46,320 INFO   Processing: real_d5k340m4jF4.mp4
+2026-03-18 09:20:51,629 INFO   Processing: real_lKvSo3Q-oUY.mp4
+2026-03-18 09:20:56,976 INFO   Processing: real_vlog_5y5uPLNIMzA.mp4
+2026-03-18 09:21:02,680 INFO   Processing: real_vlog_Hn_zXuCnDKc.mp4
+2026-03-18 09:21:06,337 INFO   Processing: real_vlog_LQtWRs8jdjs.mp4
+2026-03-18 09:21:10,589 INFO   Processing: real_vlog_WHNNHAoaZD4.mp4
+2026-03-18 09:21:15,150 INFO   Processing: real_vlog_camtTZFu5e8.mp4
+2026-03-18 09:21:19,248 INFO   Processing: real_vlog_exI_hD_4jAM.mp4
+2026-03-18 09:21:23,433 INFO   Processing: real_vlog_lIHNSOklgls.mp4
+2026-03-18 09:21:28,184 INFO   Processing: real_vlog_q8DpEhLMLYI.mp4
+2026-03-18 09:21:32,467 INFO   Processing: real_vlog_xLTCivIB4kU.mp4
+2026-03-18 09:21:36,724 INFO   Processing: real_vlog_yqHXl13SMr4.mp4
+2026-03-18 09:21:41,309 INFO   Processing: real_zAfVNkSRSM4.mp4
+2026-03-18 09:21:42,965 INFO   Loaded FakeGuard results: 40 videos
+2026-03-18 09:21:42,967 INFO 
+======================================================================
+2026-03-18 09:21:42,967 INFO COMPARATIVE BENCHMARK SUMMARY
+2026-03-18 09:21:42,967 INFO ======================================================================
+2026-03-18 09:21:42,967 INFO Model                                       Acc     F1    AUC     AI↑   Real↑
+2026-03-18 09:21:42,967 INFO ----------------------------------------------------------------------
+2026-03-18 09:21:42,967 INFO MesoNet4 (DeepfakeBench)                  0.500  0.667    0.5    50.0    50.0
+2026-03-18 09:21:42,967 INFO XceptionNet (DeepfakeBench)               0.500  0.667    0.5    50.0    50.0
+2026-03-18 09:21:42,967 INFO EfficientNet-B4 (DeepfakeBench)           0.525  0.486 0.6038    54.1    47.3
+2026-03-18 09:21:42,967 INFO RECCE (CVPR 2022)                         0.500  0.667    0.5    50.0    50.0
+2026-03-18 09:21:42,967 INFO UCF (ICCV 2023)                           0.500  0.667    0.5    50.0    50.0
+2026-03-18 09:21:42,967 INFO ViT Deepfake/Real (dima806)               0.500  0.000 0.3513    10.3    12.8
+2026-03-18 09:21:42,967 INFO ViT AI/Human (dima806) — Best Match       0.600  0.333   0.59    15.9     5.9
+2026-03-18 09:21:42,968 INFO Swin AI-Image-Detector (umm-maybe)        0.775  0.710  0.855    55.1    17.1
+2026-03-18 09:21:42,968 INFO FakeGuard (Ensemble, v1)                  0.475  0.000 0.1175    34.4    45.4
